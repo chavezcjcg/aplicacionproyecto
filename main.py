@@ -1,6 +1,8 @@
 from Estructuras.lista_simple import ListaEnlazada
 from Modelos.modelos import Nodo
-
+import sys
+from PyQt6.QtWidgets import QApplication
+from ui.pagina_principal import MainWindow 
 from Controladores.feed import ControladorFeed
 
 #ListaEnlazada.menu()
@@ -30,3 +32,13 @@ else:
 #contar post
 total = controlador.obtener_total_publicaciones()
 print(f"Total de publicaciones: {total}")
+
+def main():
+    app = QApplication(sys.argv)
+
+    window = MainWindow()   
+    window.show()
+
+    sys.exit(app.exec())
+
+main()
