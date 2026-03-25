@@ -45,3 +45,17 @@ class ControladorFeed:
             return True
         return False
                    
+    def dar_like(self, usuario, texto):
+        actual = self.lista_principal.cabeza
+
+        while actual is not None:
+            if actual.usuario == usuario and actual.texto == texto:
+                actual.likes += 1
+                
+                self.servicios.guardar_feed(self.lista_principal)
+
+                return actual.likes
+            
+            actual = actual.siguiente
+
+        return 0 
