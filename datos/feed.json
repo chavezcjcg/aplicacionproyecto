@@ -1,5 +1,26 @@
 [
     {
+        "texto": "asdf",
+        "usuario": "asdf",
+        "likes": 0,
+        "favorito": 0,
+        "comentarios": []
+    },
+    {
+        "texto": "asdf",
+        "usuario": "usuario",
+        "likes": 1,
+        "favorito": 0,
+        "comentarios": []
+    },
+    {
+        "texto": "sdafasdf",
+        "usuario": "usuario",
+        "likes": 0,
+        "favorito": 0,
+        "comentarios": []
+    },
+    {
         "texto": "Juasndkan lajsld laksj lxm",
         "usuario": "usuario",
         "likes": 0,

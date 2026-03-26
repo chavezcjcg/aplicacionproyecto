@@ -6,15 +6,16 @@ import data.store as store
 
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self, controlador):
         super().__init__()
+        self.controlador = controlador
         self.setWindowTitle("threads simulacion")
         self.setMinimumSize(800, 600)
 
         self.stack = QStackedWidget()
 
         self.login    = LoginPanel()
-        self.feed     = FeedPanel()
+        self.feed     = FeedPanel(controlador)
         self.register = RegisterPanel()
 
         self.stack.addWidget(self.login)
@@ -36,9 +37,9 @@ class MainWindow(QMainWindow):
         else:
             QMessageBox.warning(self, "Error", "Usuario o contraseña incorrectos.")
 
-    def procesar_registro(self, user, password):#si se registra entra al feed
+    def procesar_registro(self, user, password):  # si se registra entra al feed
         if store.registrar_usuario(user, password):
-            self.entrar_feed(user)   
+            self.entrar_feed(user)
         else:
             QMessageBox.warning(self, "Error", "El usuario ya existe o es inválido.")
 

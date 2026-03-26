@@ -15,9 +15,10 @@ BORDER  = "#3d3f5c"
 
 
 class PostCard(QFrame):
-    def __init__(self, post, indice_real, on_actualizar):
+    def __init__(self, nodo, controlador, on_actualizar):
         super().__init__()
-        self.indice_real = indice_real
+        self.nodo = nodo
+        self.controlador = controlador
         self.on_actualizar = on_actualizar
         self.setStyleSheet(f"""
             QFrame {{
@@ -31,15 +32,14 @@ class PostCard(QFrame):
         layout = QVBoxLayout(self)
         layout.setSpacing(6)
 
-        autor = QLabel(f"@{post['autor']}")
+        autor = QLabel(f"@{nodo.usuario}")
         autor.setStyleSheet(f"color: {PRIMARY}; font-weight: bold; font-size: 14px;")
 
-        texto = QLabel(post["texto"])
+        texto = QLabel(nodo.texto)
         texto.setWordWrap(True)
         texto.setStyleSheet(f"color: {TEXT}; font-size: 13px;")
 
-        # Botón de like
-        self.btn_like = QPushButton(f"❤️  {post['likes']}")
+        self.btn_like = QPushButton(f"❤️  {nodo.likes}")
         self.btn_like.setCursor(Qt.CursorShape.PointingHandCursor)
         self.btn_like.setFixedWidth(80)
         self.btn_like.setStyleSheet(f"""
@@ -63,14 +63,15 @@ class PostCard(QFrame):
         layout.addWidget(self.btn_like)
 
     def dar_like(self):
-        store.dar_like(self.indice_real)
+        self.controlador.dar_like(self.nodo.usuario, self.nodo.texto)
         self.on_actualizar()
 
 
 class FeedPage(QWidget):
-    def __init__(self, usuario_actual, on_perfil):
+    def __init__(self, usuario_actual, controlador, on_perfil):
         super().__init__()
         self.usuario_actual = usuario_actual
+        self.controlador = controlador
         self.setStyleSheet(f"background: {BG};")
 
         layout = QVBoxLayout(self)
@@ -176,7 +177,7 @@ class FeedPage(QWidget):
 
     def publicar(self):
         texto = self.input_post.toPlainText().strip()
-        if store.crear_post(self.usuario_actual, texto):
+        if self.controlador.crear_publicacion(texto, self.usuario_actual):
             self.input_post.clear()
             self.cargar_posts()
 
@@ -186,15 +187,21 @@ class FeedPage(QWidget):
             if w:
                 w.deleteLater()
 
-        posts = store.obtener_posts()
-        if not posts:
+        # Recorrer la lista enlazada del controlador directamente
+        nodo = self.controlador.lista_principal.cabeza if self.controlador.lista_principal else None
+        hay_posts = nodo is not None
+
+        if not hay_posts:
             vacio = QLabel("Aún no hay publicaciones")
             vacio.setAlignment(Qt.AlignmentFlag.AlignCenter)
             vacio.setStyleSheet(f"color: {SUBTEXT}; font-size: 14px; padding: 30px;")
             self.posts_layout.addWidget(vacio)
         else:
-            for p in posts:
-                self.posts_layout.addWidget(PostCard(p, posts.index(p), on_actualizar=self.cargar_posts))
+            while nodo is not None:
+                self.posts_layout.addWidget(
+                    PostCard(nodo, self.controlador, on_actualizar=self.cargar_posts)
+                )
+                nodo = nodo.siguiente
 
 
 class PerfilPage(QWidget):
@@ -335,8 +342,9 @@ class PerfilPage(QWidget):
 
 
 class FeedPanel(QWidget):
-    def __init__(self):
+    def __init__(self, controlador):
         super().__init__()
+        self.controlador = controlador
         self.usuario_actual = ""
         self.on_logout_cb = None
         self.setStyleSheet(f"background: {BG};")
@@ -352,7 +360,7 @@ class FeedPanel(QWidget):
             self.stack.removeWidget(w)
             w.deleteLater()
 
-        self.feed_page = FeedPage(self.usuario_actual, on_perfil=self.ir_perfil)
+        self.feed_page = FeedPage(self.usuario_actual, self.controlador, on_perfil=self.ir_perfil)
         self.perfil_page = PerfilPage(
             self.usuario_actual,
             on_volver=self.ir_feed,
