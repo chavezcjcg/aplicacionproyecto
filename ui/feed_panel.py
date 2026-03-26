@@ -3,11 +3,7 @@ from PyQt6.QtWidgets import (
     QTextEdit, QPushButton, QScrollArea, QFrame, QStackedWidget,
     QLineEdit
 )
-<<<<<<< HEAD
 from PyQt6.QtCore import Qt, pyqtSignal
-=======
-from PyQt6.QtCore import Qt
->>>>>>> 8b436712f195f544ed500e0cb960a768ed912b50
 import data.store as store
 
 BG      = "#1e1f2e"
@@ -49,10 +45,7 @@ class FeedPage(QWidget):
     def __init__(self, usuario_actual, on_perfil):
         super().__init__()
         self.usuario_actual = usuario_actual
-<<<<<<< HEAD
         self.scroll_infinito_activo = False
-=======
->>>>>>> 8b436712f195f544ed500e0cb960a768ed912b50
         self.setStyleSheet(f"background: {BG};")
 
         layout = QVBoxLayout(self)
@@ -69,7 +62,6 @@ class FeedPage(QWidget):
         titulo = QLabel("Threads")
         titulo.setStyleSheet(f"font-size: 18px; font-weight: bold; color: {TEXT};")
 
-<<<<<<< HEAD
         # Botón toggle para scroll infinito
         self.btn_infinito = QPushButton("∞")
         self.btn_infinito.setCursor(Qt.CursorShape.PointingHandCursor)
@@ -77,8 +69,6 @@ class FeedPage(QWidget):
         self.actualizar_estilo_boton_infinito()
         self.btn_infinito.clicked.connect(self.toggle_scroll_infinito)
 
-=======
->>>>>>> 8b436712f195f544ed500e0cb960a768ed912b50
         btn_perfil = QPushButton(f"@{usuario_actual}")
         btn_perfil.setCursor(Qt.CursorShape.PointingHandCursor)
         btn_perfil.setStyleSheet(f"""
@@ -113,10 +103,7 @@ class FeedPage(QWidget):
         top_layout.addWidget(titulo)
         top_layout.addStretch()
         top_layout.addWidget(self.input_busqueda) 
-<<<<<<< HEAD
         top_layout.addWidget(self.btn_infinito)
-=======
->>>>>>> 8b436712f195f544ed500e0cb960a768ed912b50
         top_layout.addStretch()
         top_layout.addWidget(btn_perfil)
         layout.addWidget(topbar)
@@ -177,10 +164,7 @@ class FeedPage(QWidget):
         self.scroll = QScrollArea()
         self.scroll.setWidgetResizable(True)
         self.scroll.setStyleSheet("border: none; background: transparent;")
-<<<<<<< HEAD
         self.scroll.verticalScrollBar().valueChanged.connect(self.detectar_fin_scroll)
-=======
->>>>>>> 8b436712f195f544ed500e0cb960a768ed912b50
 
         self.contenedor = QWidget()
         self.contenedor.setStyleSheet(f"background: {BG};")
@@ -236,7 +220,6 @@ class FeedPage(QWidget):
             for p in posts:
                 self.posts_layout.addWidget(PostCard(p))
 
-<<<<<<< HEAD
     def toggle_scroll_infinito(self):
         self.scroll_infinito_activo = not self.scroll_infinito_activo
         self.actualizar_estilo_boton_infinito()
@@ -278,8 +261,6 @@ class FeedPage(QWidget):
         if valor == scrollbar.maximum():
             scrollbar.setValue(0)
 
-=======
->>>>>>> 8b436712f195f544ed500e0cb960a768ed912b50
 
 class PerfilPage(QWidget):
     def __init__(self, usuario_actual, on_volver, on_logout):
