@@ -39,3 +39,7 @@ def obtener_posts():
 
 def contar_posts(username):
     return sum(1 for p in posts if p["autor"] == username)
+
+def dar_like(indice_real):
+    if 0 <= indice_real < len(posts):
+        posts[indice_real]["likes"] += 1

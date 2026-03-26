@@ -7,7 +7,7 @@ from Controladores.feed import ControladorFeed
 
 #ListaEnlazada.menu()
 
-controlador = ControladorFeed()
+'''controlador = ControladorFeed()
 lista_memoria = ListaEnlazada()
 
 def agregar_al_iniciotemp(nodo_nuevo):
@@ -31,8 +31,7 @@ else:
 
 #contar post
 total = controlador.obtener_total_publicaciones()
-print(f"Total de publicaciones: {total}")
-
+print(f"Total de publicaciones: {total}")'''
 def main():
     app = QApplication(sys.argv)
 

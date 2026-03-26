@@ -15,8 +15,10 @@ BORDER  = "#3d3f5c"
 
 
 class PostCard(QFrame):
-    def __init__(self, post):
+    def __init__(self, post, indice_real, on_actualizar):
         super().__init__()
+        self.indice_real = indice_real
+        self.on_actualizar = on_actualizar
         self.setStyleSheet(f"""
             QFrame {{
                 background: {CARD};
@@ -36,8 +38,33 @@ class PostCard(QFrame):
         texto.setWordWrap(True)
         texto.setStyleSheet(f"color: {TEXT}; font-size: 13px;")
 
+        # Botón de like
+        self.btn_like = QPushButton(f"❤️  {post['likes']}")
+        self.btn_like.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.btn_like.setFixedWidth(80)
+        self.btn_like.setStyleSheet(f"""
+            QPushButton {{
+                background: transparent;
+                color: #f04747;
+                font-size: 13px;
+                border: 1px solid #f04747;
+                border-radius: 6px;
+                padding: 4px 10px;
+            }}
+            QPushButton:hover {{
+                background: #f04747;
+                color: white;
+            }}
+        """)
+        self.btn_like.clicked.connect(self.dar_like)
+
         layout.addWidget(autor)
         layout.addWidget(texto)
+        layout.addWidget(self.btn_like)
+
+    def dar_like(self):
+        store.dar_like(self.indice_real)
+        self.on_actualizar()
 
 
 class FeedPage(QWidget):
@@ -167,7 +194,7 @@ class FeedPage(QWidget):
             self.posts_layout.addWidget(vacio)
         else:
             for p in posts:
-                self.posts_layout.addWidget(PostCard(p))
+                self.posts_layout.addWidget(PostCard(p, posts.index(p), on_actualizar=self.cargar_posts))
 
 
 class PerfilPage(QWidget):
